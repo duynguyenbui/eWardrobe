@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
-import { Menu, ShoppingCart } from 'lucide-react'
+import { Menu, ShoppingCart, UserCheck2Icon } from 'lucide-react'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet'
 import { getServerSideUser } from '@/lib/payload'
 import { cookies } from 'next/headers'
@@ -14,6 +14,8 @@ const navItems = [
   { name: 'New', href: '/new' },
   { name: 'Sales', href: '/sales' },
   { name: 'Orders', href: '/orders' },
+  { name: 'Profiles', href: '/profiles' },
+  { name: 'Statistics', href: '/statistics' },
 ]
 
 export const Navbar = async () => {
@@ -30,18 +32,36 @@ export const Navbar = async () => {
             eWardrobe
           </Link>
           <div className="hidden md:flex space-x-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.href !== '/statistics' ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  {item.name}
+                </Link>
+              ) : user?.role === 'admin' ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  {item.name}
+                </Link>
+              ) : null,
+            )}
           </div>
         </div>
         <div className="flex items-center space-x-4">
+          {['admin', 'super_admin'].includes(user?.role || 'user') && (
+            <Link href="/admin">
+              <Button variant="default">
+                <UserCheck2Icon className="h-5 w-5" />
+                Admin
+              </Button>
+            </Link>
+          )}
           <Link href="/cart">
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
@@ -59,15 +79,25 @@ export const Navbar = async () => {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="flex flex-col space-y-4 mt-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="text-sm font-medium text-gray-700 hover:text-gray-900"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {navItems.map((item) =>
+                  item.href !== '/statistics' ? (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : user?.role === 'admin' ? (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : null,
+                )}
               </div>
             </SheetContent>
           </Sheet>

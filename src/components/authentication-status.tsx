@@ -18,12 +18,12 @@ export const AuthenticationStatus = ({ isAuth }: { isAuth: boolean }) => {
           Logout
         </Button>
       ) : (
-        <div className="space-x-2">
+        <div className="flex space-x-2 mr-2">
           <Link className={cn(buttonVariants({ variant: 'ghost' }))} href="/login">
             <LogIn className="h-5 w-5 mr-2" />
             Login
           </Link>
-          <Link className={cn(buttonVariants())} href="/signup">
+          <Link className={cn(buttonVariants({ variant: 'secondary' }))} href="/signup">
             <UserPlus2 className="h-5 w-5 mr-2" />
             Sign Up
           </Link>

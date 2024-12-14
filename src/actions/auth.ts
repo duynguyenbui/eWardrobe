@@ -1,5 +1,6 @@
 'use server'
 
+import { SIGNUP_SUCCESS_MESSAGE, USER_ALREADY_EXISTS_MESSAGE } from '@/constants'
 import { getPayloadClient } from '@/get-payload'
 import { PayloadUserValidator, TPayloadUserValidator } from '@/validators'
 
@@ -18,7 +19,7 @@ export const createUser = async (input: TPayloadUserValidator) => {
   })
 
   if (users.length !== 0) {
-    return { success: false, message: 'User already exists' }
+    return { success: false, message: USER_ALREADY_EXISTS_MESSAGE }
   }
 
   await payload.create({
@@ -30,5 +31,5 @@ export const createUser = async (input: TPayloadUserValidator) => {
     },
   })
 
-  return { success: true, message: 'User created' }
+  return { success: true, message: SIGNUP_SUCCESS_MESSAGE }
 }

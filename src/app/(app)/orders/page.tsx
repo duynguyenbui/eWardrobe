@@ -1,7 +1,7 @@
 import React from 'react'
 
 const OrderPage = () => {
-  return <div className="font-bold">OrderPage</div>
+  return <div>OrderPage</div>
 }
 
 export default OrderPage

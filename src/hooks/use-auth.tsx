@@ -1,6 +1,13 @@
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import axios from 'axios'
+import {
+  INTERNAL_ERROR_MESSAGE,
+  LOGIN_FAILURE_MESSAGE,
+  LOGIN_SUCCESS_MESSAGE,
+  LOGOUT_FAILURE_MESSAGE,
+  LOGOUT_SUCCESS_MESSAGE,
+} from '@/constants'
 
 export const useAuth = () => {
   const router = useRouter()
@@ -21,14 +28,14 @@ export const useAuth = () => {
       )
 
       if (res.status !== 200) {
-        toast.error("Couldn't sign in, please try again.")
+        toast.error(LOGIN_FAILURE_MESSAGE)
       } else {
-        toast.success('Signed in successfully')
+        toast.success(LOGIN_SUCCESS_MESSAGE)
         router.push('/')
       }
       router.refresh()
     } catch (error) {
-      toast.error('Something went wrong while logging in')
+      toast.error(INTERNAL_ERROR_MESSAGE)
     }
   }
 
@@ -46,14 +53,14 @@ export const useAuth = () => {
       )
 
       if (res.status !== 200) {
-        toast.error("Couldn't sign out, please try again.")
+        toast.error(LOGOUT_FAILURE_MESSAGE)
       } else {
-        toast.success('Signed out successfully')
+        toast.success(LOGOUT_SUCCESS_MESSAGE)
         router.push('/')
       }
       router.refresh()
     } catch (err) {
-      toast.error("Couldn't sign out, please try again.")
+      toast.error(LOGOUT_FAILURE_MESSAGE)
     }
   }
 

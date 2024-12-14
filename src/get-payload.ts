@@ -1,5 +1,6 @@
 import { getPayload, Payload } from 'payload'
 import config from './payload.config'
+import { PAYLOAD_SECRET_MISSING_MESSAGE } from './constants'
 
 let cached = (global as any).payload
 
@@ -11,7 +12,7 @@ if (!cached) {
 
 export const getPayloadClient = async (): Promise<Payload> => {
   if (!process.env.PAYLOAD_SECRET) {
-    throw new Error('PAYLOAD_SECRET is missing')
+    throw new Error(PAYLOAD_SECRET_MISSING_MESSAGE)
   }
 
   if (cached.client) {

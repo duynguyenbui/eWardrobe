@@ -13,8 +13,16 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    categories: Category;
+    product_categories: ProductCategory;
+    product_types: ProductType;
     products: Product;
+    materials: Material;
+    product_collection: ProductCollection;
+    product_variants: ProductVariant;
+    currency: Currency;
+    prices: Price;
+    price_sets: PriceSet;
+    customer_address: CustomerAddress;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -23,8 +31,16 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    product_categories: ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
+    product_types: ProductTypesSelect<false> | ProductTypesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    materials: MaterialsSelect<false> | MaterialsSelect<true>;
+    product_collection: ProductCollectionSelect<false> | ProductCollectionSelect<true>;
+    product_variants: ProductVariantsSelect<false> | ProductVariantsSelect<true>;
+    currency: CurrencySelect<false> | CurrencySelect<true>;
+    prices: PricesSelect<false> | PricesSelect<true>;
+    price_sets: PriceSetsSelect<false> | PriceSetsSelect<true>;
+    customer_address: CustomerAddressSelect<false> | CustomerAddressSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -67,7 +83,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
-  role: 'admin' | 'user';
+  role: 'super_admin' | 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -100,11 +116,36 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "product_categories".
  */
-export interface Category {
+export interface ProductCategory {
   id: number;
-  title?: string | null;
+  name?: string | null;
+  description?: string | null;
+  mpath?: string | null;
+  is_active?: boolean | null;
+  is_internal?: boolean | null;
+  rank?: number | null;
+  parent_category?: (number | null) | ProductCategory;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_types".
+ */
+export interface ProductType {
+  id: number;
+  value: string;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -116,14 +157,185 @@ export interface Product {
   id: number;
   name: string;
   description?: string | null;
-  price: number;
-  categories?: (number | Category)[] | null;
-  priceId?: string | null;
-  stripeId?: string | null;
+  textEmbedding?: string | null;
+  imgEmbedding?: string | null;
+  product_categories?: (number | null) | ProductCategory;
+  product_collection?: (number | null) | ProductCollection;
+  material?: (number | Material)[] | null;
+  product_type?: (number | null) | ProductType;
+  origin_country?: string | null;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  discountable: boolean;
+  id_giftcard: boolean;
   images: {
     image: number | Media;
     id?: string | null;
   }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_collection".
+ */
+export interface ProductCollection {
+  id: number;
+  title: string;
+  desciption?: string | null;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "materials".
+ */
+export interface Material {
+  id: number;
+  material: string;
+  description?: string | null;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_variants".
+ */
+export interface ProductVariant {
+  id: number;
+  name: string;
+  sku?: number | null;
+  barcode?: string | null;
+  upc?: string | null;
+  price_set: number | PriceSet;
+  priceId?: string | null;
+  stripeId?: string | null;
+  allow_backorder?: boolean | null;
+  weight?: number | null;
+  length?: number | null;
+  height?: number | null;
+  width?: number | null;
+  material?: (number | Material)[] | null;
+  origin_country?: string | null;
+  variant_rank?: number | null;
+  product: number | Product;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "price_sets".
+ */
+export interface PriceSet {
+  id: number;
+  title: string;
+  prices?: (number | Price)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prices".
+ */
+export interface Price {
+  id: number;
+  title: string;
+  currency_code?: (number | null) | Currency;
+  raw_amount?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  amount: number;
+  min_quantity: number;
+  max_quantity: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "currency".
+ */
+export interface Currency {
+  id: number;
+  code: string;
+  symbol: string;
+  symbol_native: string;
+  decimal_digits: number;
+  rounding: number;
+  raw_rounding?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  name: string;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customer_address".
+ */
+export interface CustomerAddress {
+  id: number;
+  customer_id: string;
+  address_name: string;
+  is_default_shipping?: boolean | null;
+  is_default_billing?: boolean | null;
+  company?: string | null;
+  first_name: string;
+  last_name: string;
+  address_1: string;
+  address_2?: string | null;
+  city: string;
+  country_code: string;
+  province: string;
+  postal_code: string;
+  phone: string;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -143,12 +355,44 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'categories';
-        value: number | Category;
+        relationTo: 'product_categories';
+        value: number | ProductCategory;
+      } | null)
+    | ({
+        relationTo: 'product_types';
+        value: number | ProductType;
       } | null)
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'materials';
+        value: number | Material;
+      } | null)
+    | ({
+        relationTo: 'product_collection';
+        value: number | ProductCollection;
+      } | null)
+    | ({
+        relationTo: 'product_variants';
+        value: number | ProductVariant;
+      } | null)
+    | ({
+        relationTo: 'currency';
+        value: number | Currency;
+      } | null)
+    | ({
+        relationTo: 'prices';
+        value: number | Price;
+      } | null)
+    | ({
+        relationTo: 'price_sets';
+        value: number | PriceSet;
+      } | null)
+    | ({
+        relationTo: 'customer_address';
+        value: number | CustomerAddress;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -228,10 +472,26 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
+ * via the `definition` "product_categories_select".
  */
-export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  mpath?: T;
+  is_active?: T;
+  is_internal?: T;
+  rank?: T;
+  parent_category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_types_select".
+ */
+export interface ProductTypesSelect<T extends boolean = true> {
+  value?: T;
+  metadata?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -242,16 +502,132 @@ export interface CategoriesSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  price?: T;
-  categories?: T;
-  priceId?: T;
-  stripeId?: T;
+  textEmbedding?: T;
+  imgEmbedding?: T;
+  product_categories?: T;
+  product_collection?: T;
+  material?: T;
+  product_type?: T;
+  origin_country?: T;
+  metadata?: T;
+  discountable?: T;
+  id_giftcard?: T;
   images?:
     | T
     | {
         image?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "materials_select".
+ */
+export interface MaterialsSelect<T extends boolean = true> {
+  material?: T;
+  description?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_collection_select".
+ */
+export interface ProductCollectionSelect<T extends boolean = true> {
+  title?: T;
+  desciption?: T;
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_variants_select".
+ */
+export interface ProductVariantsSelect<T extends boolean = true> {
+  name?: T;
+  sku?: T;
+  barcode?: T;
+  upc?: T;
+  price_set?: T;
+  priceId?: T;
+  stripeId?: T;
+  allow_backorder?: T;
+  weight?: T;
+  length?: T;
+  height?: T;
+  width?: T;
+  material?: T;
+  origin_country?: T;
+  variant_rank?: T;
+  product?: T;
+  metadata?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "currency_select".
+ */
+export interface CurrencySelect<T extends boolean = true> {
+  code?: T;
+  symbol?: T;
+  symbol_native?: T;
+  decimal_digits?: T;
+  rounding?: T;
+  raw_rounding?: T;
+  name?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prices_select".
+ */
+export interface PricesSelect<T extends boolean = true> {
+  title?: T;
+  currency_code?: T;
+  raw_amount?: T;
+  amount?: T;
+  min_quantity?: T;
+  max_quantity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "price_sets_select".
+ */
+export interface PriceSetsSelect<T extends boolean = true> {
+  title?: T;
+  prices?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customer_address_select".
+ */
+export interface CustomerAddressSelect<T extends boolean = true> {
+  customer_id?: T;
+  address_name?: T;
+  is_default_shipping?: T;
+  is_default_billing?: T;
+  company?: T;
+  first_name?: T;
+  last_name?: T;
+  address_1?: T;
+  address_2?: T;
+  city?: T;
+  country_code?: T;
+  province?: T;
+  postal_code?: T;
+  phone?: T;
+  metadata?: T;
   updatedAt?: T;
   createdAt?: T;
 }

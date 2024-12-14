@@ -1,7 +1,13 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { getServerSideUser } from '@/lib/payload'
+import { cookies } from 'next/headers'
+import Image from 'next/image'
 
-export default function Home() {
+export default async function Home() {
+  const nextCookies = await cookies()
+  const { user } = await getServerSideUser(nextCookies)
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
@@ -18,7 +24,7 @@ export default function Home() {
               </div>
               <div className="w-full max-w-sm space-y-2">
                 <Button className="w-full" asChild>
-                  <Link href="/signup">Get Started</Link>
+                  <Link href={user ? '/profiles' : '/signup'}>Get Started</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/listings">Learn More</Link>
@@ -40,7 +46,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="w-full max-w-full overflow-hidden">
-                <img
+                <Image
                   alt="eWardrobe App Screenshot"
                   className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center"
                   height="310"

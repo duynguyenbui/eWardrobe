@@ -6,11 +6,18 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { Categories } from './collections/Categories'
+import { ProductCategories } from './collections/ProductCategories'
 import { Products } from './collections/Products'
+import { Meterials } from './collections/Materials'
+import { ProductCollection } from './collections/ProductCollection'
+import { ProductVariants } from './collections/ProductVariants'
+import { Currency } from './collections/Currency'
+import { ProductTypes } from './collections/ProductTypes'
+import { Prices } from './collections/Price'
+import { PriceSets } from './collections/PriceSet'
+import { CustomerAddress } from './collections/CustomerAddress'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +29,20 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products],
+  collections: [
+    Users,
+    Media,
+    ProductCategories,
+    ProductTypes,
+    Products,
+    Meterials,
+    ProductCollection,
+    ProductVariants,
+    Currency,
+    Prices,
+    PriceSets,
+    CustomerAddress,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -36,6 +56,5 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    // storage-adapter-placeholder
   ],
 })

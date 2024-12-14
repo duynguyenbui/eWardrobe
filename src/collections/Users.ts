@@ -1,26 +1,16 @@
-import { AfterLogoutHook } from 'node_modules/payload/dist/collections/config/types'
-import type { CollectionConfig, Access } from 'payload'
-
-const adminsAndUser: Access = ({ req: { user } }) => {
-  if (user?.role === 'admin') return true
-
-  return {
-    id: {
-      equals: user?.id,
-    },
-  }
-}
+import { redirect } from 'next/navigation'
+import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    read: adminsAndUser,
-    create: () => true,
-    update: ({ req }) => req.user?.role === 'admin',
-    delete: ({ req }) => req.user?.role === 'admin',
+    read: () => true,
+    create: ({ req }) => req.user?.role === 'super_admin',
+    update: ({ req }) => req.user?.role === 'super_admin',
+    delete: ({ req }) => req.user?.role === 'super_admin',
   },
   admin: {
-    hidden: ({ user }) => user?.role !== 'admin',
+    hidden: ({ user }) => user?.role === 'user',
     defaultColumns: ['id', 'email', 'role'],
   },
   auth: {
@@ -38,6 +28,7 @@ export const Users: CollectionConfig = {
 
       type: 'select',
       options: [
+        { label: 'Super Admin', value: 'super_admin' },
         { label: 'Admin', value: 'admin' },
         { label: 'User', value: 'user' },
       ],

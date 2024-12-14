@@ -1,3 +1,4 @@
+import { isAdmin } from '@/payload-roles'
 import { CollectionConfig } from 'payload'
 
 export const Products: CollectionConfig = {
@@ -7,9 +8,9 @@ export const Products: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: () => true,
-    delete: () => true,
-    update: () => true,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   fields: [
     {
@@ -24,45 +25,96 @@ export const Products: CollectionConfig = {
       label: 'Product details',
     },
     {
-      name: 'price',
-      label: 'Price in USD',
-      min: 0,
-      max: 1000,
-      type: 'number',
-      required: true,
+      name: 'textEmbedding',
+      label: 'Text Embedding',
+      access: {
+        create: () => false,
+        read: () => false,
+        update: () => false,
+      },
+      type: 'text',
+      admin: {
+        hidden: true,
+      },
     },
     {
-      name: 'categories',
+      name: 'imgEmbedding',
+      label: 'Image Embedding',
+      access: {
+        create: () => false,
+        read: () => false,
+        update: () => false,
+      },
+      type: 'text',
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: 'product_categories',
       type: 'relationship',
-      relationTo: 'categories',
+      label: 'Product Categories',
+      relationTo: 'product_categories',
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'product_collection',
+      label: 'Product Collection',
+      type: 'relationship',
+      relationTo: 'product_collection',
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'material',
+      type: 'relationship',
+      relationTo: 'materials',
       hasMany: true,
       admin: {
         position: 'sidebar',
       },
     },
     {
-      name: 'priceId',
-      access: {
-        create: () => false,
-        read: () => false,
-        update: () => false,
-      },
-      type: 'text',
+      name: 'product_type',
+      label: 'Product Type',
+      type: 'relationship',
+      relationTo: 'product_types',
+      hasMany: false,
       admin: {
-        hidden: true,
+        position: 'sidebar',
       },
     },
     {
-      name: 'stripeId',
-      access: {
-        create: () => false,
-        read: () => false,
-        update: () => false,
-      },
+      name: 'origin_country',
+      label: 'Origin Country',
       type: 'text',
-      admin: {
-        hidden: true,
-      },
+      defaultValue: 'Viet Nam',
+      required: false,
+    },
+    {
+      name: 'metadata',
+      label: 'Metadata',
+      type: 'json',
+      required: false,
+    },
+    {
+      name: 'discountable',
+      label: 'Discountable',
+      type: 'checkbox',
+      defaultValue: false,
+      required: true,
+    },
+    {
+      name: 'id_giftcard',
+      label: 'Gift Card',
+      type: 'checkbox',
+      defaultValue: false,
+      required: true,
     },
     {
       name: 'images',

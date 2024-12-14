@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSideUser } from '@/lib/payload'
+import { getServerSideUser } from './lib/payload'
+import { cookies } from 'next/headers'
 
 export async function middleware(req: NextRequest) {
-  const { nextUrl, cookies } = req
-  const user = await getServerSideUser(cookies)
+  const { pathname } = req.nextUrl
+  const nextCookies = await cookies()
+  const { user } = await getServerSideUser(nextCookies)
+
+  if (pathname.includes('/admin') && !['super_admin', 'admin'].includes(user?.role || 'user')) {
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SERVER_URL}/`)
+  }
 }
 
 export const config = {
