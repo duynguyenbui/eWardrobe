@@ -33,5 +33,13 @@ export const Users: CollectionConfig = {
         { label: 'User', value: 'user' },
       ],
     },
+    {
+      name: 'customer_address',
+      type: 'relationship',
+      label: 'Customer Address',
+      relationTo: 'customer_address',
+      hasMany: false,
+      required: false,
+    },
   ],
 }

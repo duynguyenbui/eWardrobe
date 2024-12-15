@@ -1,12 +1,10 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { getServerSideUser } from '@/lib/payload'
-import { cookies } from 'next/headers'
+import { currentUser } from '@/lib/payload'
 import Image from 'next/image'
 
 export default async function Home() {
-  const nextCookies = await cookies()
-  const { user } = await getServerSideUser(nextCookies)
+  const { user } = await currentUser()
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -24,7 +22,7 @@ export default async function Home() {
               </div>
               <div className="w-full max-w-sm space-y-2">
                 <Button className="w-full" asChild>
-                  <Link href={user ? '/profiles' : '/signup'}>Get Started</Link>
+                  <Link href={user ? '/profiles' : '/login'}>Get Started</Link>
                 </Button>
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/listings">Learn More</Link>

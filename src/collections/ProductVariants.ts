@@ -1,3 +1,4 @@
+import { uuidv4 } from '@/lib/uuid'
 import { isAdmin } from '@/payload-roles'
 import { CollectionConfig } from 'payload'
 
@@ -32,11 +33,13 @@ export const ProductVariants: CollectionConfig = {
       name: 'barcode',
       type: 'text',
       label: 'Barcode',
+      defaultValue: () => uuidv4(),
     },
     {
       name: 'upc',
       type: 'text',
       label: 'UPC',
+      defaultValue: () => uuidv4(),
     },
     {
       name: 'price_set',

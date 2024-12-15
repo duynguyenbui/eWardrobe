@@ -1,6 +1,6 @@
 import { getPayload, Payload } from 'payload'
 import config from './payload.config'
-import { PAYLOAD_SECRET_MISSING_MESSAGE } from './constants'
+import { PAYLOAD_SECRET_MISSING_MESSAGE } from './constants/message'
 
 let cached = (global as any).payload
 

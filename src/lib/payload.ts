@@ -1,5 +1,6 @@
 import { User } from '../payload-types'
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
+import { cookies } from 'next/headers'
 import { NextRequest } from 'next/server'
 
 export const getServerSideUser = async (
@@ -22,4 +23,17 @@ export const getServerSideUser = async (
   }
 
   return { user }
+}
+
+export const currentUser = async () => {
+  const nextCookies = await cookies()
+  const { user } = await getServerSideUser(nextCookies)
+
+  return { user }
+}
+
+export const isAdmin = async () => {
+  const { user } = await currentUser()
+
+  return ['super_admin', 'admin'].includes(user?.role || 'user')
 }

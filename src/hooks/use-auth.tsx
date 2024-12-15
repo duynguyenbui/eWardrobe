@@ -7,7 +7,7 @@ import {
   LOGIN_SUCCESS_MESSAGE,
   LOGOUT_FAILURE_MESSAGE,
   LOGOUT_SUCCESS_MESSAGE,
-} from '@/constants'
+} from '@/constants/message'
 
 export const useAuth = () => {
   const router = useRouter()

@@ -84,6 +84,7 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   role: 'super_admin' | 'admin' | 'user';
+  customer_address?: (number | null) | CustomerAddress;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -94,6 +95,37 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customer_address".
+ */
+export interface CustomerAddress {
+  id: number;
+  address_name: string;
+  is_default_shipping?: boolean | null;
+  is_default_billing?: boolean | null;
+  company?: string | null;
+  first_name: string;
+  last_name: string;
+  address_1: string;
+  address_2?: string | null;
+  city: string;
+  country_code: string;
+  province: string;
+  postal_code: string;
+  phone: string;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -159,10 +191,11 @@ export interface Product {
   description?: string | null;
   textEmbedding?: string | null;
   imgEmbedding?: string | null;
-  product_categories?: (number | null) | ProductCategory;
+  product_categories: (number | ProductCategory)[];
   product_collection?: (number | null) | ProductCollection;
-  material?: (number | Material)[] | null;
-  product_type?: (number | null) | ProductType;
+  materials: (number | Material)[];
+  product_type: number | ProductType;
+  product_variants?: (number | ProductVariant)[] | null;
   origin_country?: string | null;
   metadata?:
     | {
@@ -309,38 +342,6 @@ export interface Currency {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "customer_address".
- */
-export interface CustomerAddress {
-  id: number;
-  customer_id: string;
-  address_name: string;
-  is_default_shipping?: boolean | null;
-  is_default_billing?: boolean | null;
-  company?: string | null;
-  first_name: string;
-  last_name: string;
-  address_1: string;
-  address_2?: string | null;
-  city: string;
-  country_code: string;
-  province: string;
-  postal_code: string;
-  phone: string;
-  metadata?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -442,6 +443,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   role?: T;
+  customer_address?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -506,8 +508,9 @@ export interface ProductsSelect<T extends boolean = true> {
   imgEmbedding?: T;
   product_categories?: T;
   product_collection?: T;
-  material?: T;
+  materials?: T;
   product_type?: T;
+  product_variants?: T;
   origin_country?: T;
   metadata?: T;
   discountable?: T;
@@ -613,7 +616,6 @@ export interface PriceSetsSelect<T extends boolean = true> {
  * via the `definition` "customer_address_select".
  */
 export interface CustomerAddressSelect<T extends boolean = true> {
-  customer_id?: T;
   address_name?: T;
   is_default_shipping?: T;
   is_default_billing?: T;

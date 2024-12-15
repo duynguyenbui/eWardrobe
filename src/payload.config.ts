@@ -28,7 +28,24 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      title: 'eWardrobe',
+      titleSuffix: ' - eWardrobe',
+    },
+    components: {
+      views: {
+        statistics: {
+          Component: './views/statistics/Statistics',
+          path: '/statistics',
+        },
+      },
+      graphics: {
+        Logo: './views/logo/Logo',
+        Icon: './views/icon/Icon',
+      },
+    },
   },
+
   collections: [
     Users,
     Media,
@@ -54,7 +71,5 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [
-    payloadCloudPlugin(),
-  ],
+  plugins: [payloadCloudPlugin()],
 })

@@ -1,6 +1,6 @@
 'use server'
 
-import { SIGNUP_SUCCESS_MESSAGE, USER_ALREADY_EXISTS_MESSAGE } from '@/constants'
+import { SIGNUP_SUCCESS_MESSAGE, USER_ALREADY_EXISTS_MESSAGE } from '@/constants/message'
 import { getPayloadClient } from '@/get-payload'
 import { PayloadUserValidator, TPayloadUserValidator } from '@/validators'
 

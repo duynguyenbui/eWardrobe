@@ -3,10 +3,10 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Menu, ShoppingCart, UserCheck2Icon } from 'lucide-react'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet'
-import { getServerSideUser } from '@/lib/payload'
-import { cookies } from 'next/headers'
 import { getPayloadClient } from '@/get-payload'
-import { AuthenticationStatus } from './authentication-status'
+import { AuthenticationStatus } from './auth-status'
+import { currentUser } from '@/lib/payload'
+import { ModeToggle } from './mode-toggle'
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -15,14 +15,11 @@ const navItems = [
   { name: 'Sales', href: '/sales' },
   { name: 'Orders', href: '/orders' },
   { name: 'Profiles', href: '/profiles' },
-  { name: 'Statistics', href: '/statistics' },
+  { name: 'Statistics', href: '/admin/statistics' },
 ]
 
 export const Navbar = async () => {
-  const nextCookies = await cookies()
-  const { user } = await getServerSideUser(nextCookies)
-
-  const client = await getPayloadClient()
+  const { user } = await currentUser()
 
   return (
     <nav className="border-b">
@@ -34,19 +31,11 @@ export const Navbar = async () => {
           <div className="hidden md:flex space-x-4">
             {navItems.map((item) =>
               item.href !== '/statistics' ? (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
-                >
+                <Link key={item.name} href={item.href} className="text-sm font-medium">
                   {item.name}
                 </Link>
               ) : user?.role === 'admin' ? (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
-                >
+                <Link key={item.name} href={item.href} className="text-sm font-medium">
                   {item.name}
                 </Link>
               ) : null,
@@ -69,6 +58,9 @@ export const Navbar = async () => {
             </Button>
           </Link>
           <AuthenticationStatus isAuth={Boolean(user)} />
+          <div className='hidden md:block'>
+            <ModeToggle />
+          </div>
           <Sheet>
             <SheetTitle className="hidden">Menu</SheetTitle>
             <SheetTrigger asChild>
@@ -81,23 +73,16 @@ export const Navbar = async () => {
               <div className="flex flex-col space-y-4 mt-4">
                 {navItems.map((item) =>
                   item.href !== '/statistics' ? (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
-                    >
+                    <Link key={item.name} href={item.href} className="text-sm font-medium">
                       {item.name}
                     </Link>
                   ) : user?.role === 'admin' ? (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
-                    >
+                    <Link key={item.name} href={item.href} className="text-sm font-medium">
                       {item.name}
                     </Link>
                   ) : null,
                 )}
+                <ModeToggle />
               </div>
             </SheetContent>
           </Sheet>

@@ -5,6 +5,7 @@ export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'name',
+    defaultColumns: ['name', 'product_categories', 'product_collection', 'product_type'],
   },
   access: {
     read: () => true,
@@ -55,10 +56,11 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       label: 'Product Categories',
       relationTo: 'product_categories',
-      hasMany: false,
+      hasMany: true,
       admin: {
         position: 'sidebar',
       },
+      required: true,
     },
     {
       name: 'product_collection',
@@ -71,13 +73,14 @@ export const Products: CollectionConfig = {
       },
     },
     {
-      name: 'material',
+      name: 'materials',
       type: 'relationship',
       relationTo: 'materials',
       hasMany: true,
       admin: {
         position: 'sidebar',
       },
+      required: true,
     },
     {
       name: 'product_type',
@@ -85,6 +88,17 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'product_types',
       hasMany: false,
+      admin: {
+        position: 'sidebar',
+      },
+      required: true,
+    },
+    {
+      name: 'product_variants',
+      label: 'Product Variants',
+      type: 'relationship',
+      relationTo: 'product_variants',
+      hasMany: true,
       admin: {
         position: 'sidebar',
       },

@@ -6,6 +6,14 @@ const nextConfig = {
   experimental: {
     reactCompiler: false,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+  },
 }
 
 // Make sure you wrap your `nextConfig`

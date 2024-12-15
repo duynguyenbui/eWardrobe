@@ -18,12 +18,6 @@ export const CustomerAddress: CollectionConfig = {
   },
   fields: [
     {
-      name: 'customer_id',
-      label: 'Customer ID',
-      type: 'text',
-      required: true,
-    },
-    {
       name: 'address_name',
       label: 'Address Name',
       type: 'text',

@@ -7,6 +7,10 @@ const LOGOUT_FAILURE_MESSAGE = 'Logout failed. Please try again.'
 const INTERNAL_ERROR_MESSAGE = 'Something went wrong. Please try again later.'
 const USER_ALREADY_EXISTS_MESSAGE = 'This user already exists. Please use a different email.'
 const PAYLOAD_SECRET_MISSING_MESSAGE = 'Required payload is missing. Please check your input.'
+const GET_PRODUCTS_SUCCESS_MESSAGE = 'Products fetched successfully.'
+const GET_PRODUCTS_FAILURE_MESSAGE = 'Failed to fetch products. Please try again.'
+const GET_PROFILE_SUCCESS_MESSAGE = 'Profile fetched successfully.'
+const GET_PROFILE_FAILURE_MESSAGE = 'Failed to fetch profile. Please try again.'
 
 export {
   SIGNUP_SUCCESS_MESSAGE,
@@ -18,4 +22,8 @@ export {
   INTERNAL_ERROR_MESSAGE,
   USER_ALREADY_EXISTS_MESSAGE,
   PAYLOAD_SECRET_MISSING_MESSAGE,
+  GET_PRODUCTS_SUCCESS_MESSAGE,
+  GET_PRODUCTS_FAILURE_MESSAGE,
+  GET_PROFILE_SUCCESS_MESSAGE,
+  GET_PROFILE_FAILURE_MESSAGE,
 }
