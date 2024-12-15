@@ -257,10 +257,9 @@ export interface ProductVariant {
   sku?: number | null;
   barcode?: string | null;
   upc?: string | null;
-  price_set: number | PriceSet;
+  prices: (number | Price)[];
   priceId?: string | null;
   stripeId?: string | null;
-  allow_backorder?: boolean | null;
   weight?: number | null;
   length?: number | null;
   height?: number | null;
@@ -269,6 +268,10 @@ export interface ProductVariant {
   origin_country?: string | null;
   variant_rank?: number | null;
   product: number | Product;
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
   metadata?:
     | {
         [k: string]: unknown;
@@ -278,17 +281,6 @@ export interface ProductVariant {
     | number
     | boolean
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "price_sets".
- */
-export interface PriceSet {
-  id: number;
-  title: string;
-  prices?: (number | Price)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -309,9 +301,13 @@ export interface Price {
     | number
     | boolean
     | null;
+  priority?: number | null;
+  start_date?: string | null;
+  end_date?: string | null;
   amount: number;
   min_quantity: number;
   max_quantity: number;
+  is_active?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -337,6 +333,17 @@ export interface Currency {
     | null;
   name: string;
   status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "price_sets".
+ */
+export interface PriceSet {
+  id: number;
+  title: string;
+  prices?: (number | Price)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -555,10 +562,9 @@ export interface ProductVariantsSelect<T extends boolean = true> {
   sku?: T;
   barcode?: T;
   upc?: T;
-  price_set?: T;
+  prices?: T;
   priceId?: T;
   stripeId?: T;
-  allow_backorder?: T;
   weight?: T;
   length?: T;
   height?: T;
@@ -567,6 +573,12 @@ export interface ProductVariantsSelect<T extends boolean = true> {
   origin_country?: T;
   variant_rank?: T;
   product?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
   metadata?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -595,9 +607,13 @@ export interface PricesSelect<T extends boolean = true> {
   title?: T;
   currency_code?: T;
   raw_amount?: T;
+  priority?: T;
+  start_date?: T;
+  end_date?: T;
   amount?: T;
   min_quantity?: T;
   max_quantity?: T;
+  is_active?: T;
   updatedAt?: T;
   createdAt?: T;
 }

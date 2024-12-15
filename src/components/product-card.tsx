@@ -1,11 +1,12 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import Image from 'next/image'
 import { parse } from '@/lib/image'
 import { Product } from '@/payload-types'
 import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from './ui/badge'
+import { cn } from '@/lib/utils'
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const {
@@ -24,7 +25,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
       <Link href={`/listings/${product.id}`}>
         <div className="relative aspect-square overflow-hidden">
           <Image
-            src={parse(images[0])}
+            src={parse(images[0]) || '/product-placeholder.svg'}
             alt={name}
             fill
             className="object-cover transition-transform duration-300 hover:scale-105"
@@ -41,7 +42,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           <CardTitle className="text-xl font-semibold line-clamp-2 items-center flex space-x-2">
             <span>{name}</span>
             <Badge variant="default" className="text-xs">
-              {product_variants?.length && 0}
+              {product_variants?.length ?? 0}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -52,7 +53,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           <p className="text-muted-foreground text-sm">Categories: </p>
           {product_categories.map((category, index) => (
             <Badge key={index} variant="secondary" className="text-xs">
-              {typeof (category as any).name === 'string' ? (category as any).name : ''}
+              {typeof category !== 'number' && category.name}
             </Badge>
           ))}
         </div>
@@ -61,17 +62,17 @@ export const ProductCard = ({ product }: { product: Product }) => {
             <p className="text-muted-foreground">Materials: </p>
             {materials.map((data, index) => (
               <Badge key={index} variant="destructive" className="text-xs">
-                {typeof (data as any).material === 'string' ? (data as any).material : ''}
+                {typeof data !== 'number' && data.material}
               </Badge>
             ))}
           </div>
         )}
       </CardContent>
       <CardFooter>
-        <Button className="w-full group" variant="outline">
+        <Link className={cn('w-full group', buttonVariants())} href={`/listings/${product.id}`}>
           <ShoppingCart className="w-4 h-4 mr-2 transition-transform group-hover:scale-110" />
-          Add to Cart
-        </Button>
+          Continue
+        </Link>
       </CardFooter>
     </Card>
   )

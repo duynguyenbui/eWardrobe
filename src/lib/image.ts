@@ -1,6 +1,6 @@
-export function parse(data: any): string {
+export function parse(data: any): string | null {
   if (!data || !data.image || !data.image.url) {
-    return ''
+    return null
   }
 
   return `${process.env.NEXT_PUBLIC_SERVER_URL}${data.image.url}`

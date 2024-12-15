@@ -1,5 +1,6 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { stripePlugin } from '@payloadcms/plugin-stripe'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -71,5 +72,14 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [payloadCloudPlugin()],
+  plugins: [
+    payloadCloudPlugin(),
+    stripePlugin({
+      stripeSecretKey: process.env.STRIPE_SECRET_KEY!,
+      stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOKS_ENDPOINT_SECRET!,
+      webhooks: {
+        'checkout.session.completed': ({ event, stripe, pluginConfig, req, config }) => {},
+      },
+    }),
+  ],
 })

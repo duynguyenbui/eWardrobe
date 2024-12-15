@@ -11,6 +11,8 @@ const GET_PRODUCTS_SUCCESS_MESSAGE = 'Products fetched successfully.'
 const GET_PRODUCTS_FAILURE_MESSAGE = 'Failed to fetch products. Please try again.'
 const GET_PROFILE_SUCCESS_MESSAGE = 'Profile fetched successfully.'
 const GET_PROFILE_FAILURE_MESSAGE = 'Failed to fetch profile. Please try again.'
+const VARIANT_LOADED_SUCCESS_MESSAGE = 'Variants loaded successfully.'
+const VARIANT_LOADED_FAILURE_MESSAGE = 'Failed to load variants. Please try again.'
 
 export {
   SIGNUP_SUCCESS_MESSAGE,
@@ -26,4 +28,6 @@ export {
   GET_PRODUCTS_FAILURE_MESSAGE,
   GET_PROFILE_SUCCESS_MESSAGE,
   GET_PROFILE_FAILURE_MESSAGE,
+  VARIANT_LOADED_SUCCESS_MESSAGE,
+  VARIANT_LOADED_FAILURE_MESSAGE,
 }

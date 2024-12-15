@@ -30,7 +30,7 @@ export const Navbar = async () => {
           </Link>
           <div className="hidden md:flex space-x-4">
             {navItems.map((item) =>
-              item.href !== '/statistics' ? (
+              item.href !== '/admin/statistics' ? (
                 <Link key={item.name} href={item.href} className="text-sm font-medium">
                   {item.name}
                 </Link>
@@ -58,7 +58,7 @@ export const Navbar = async () => {
             </Button>
           </Link>
           <AuthenticationStatus isAuth={Boolean(user)} />
-          <div className='hidden md:block'>
+          <div className="hidden md:block">
             <ModeToggle />
           </div>
           <Sheet>

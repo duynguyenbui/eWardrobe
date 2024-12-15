@@ -37,8 +37,8 @@ const ListingsPage = () => {
           <CategoryFilter setCategory={setCategory} />
           <TypeFilter setType={setType} />
         </div>
-        <div className="text-muted-foreground text-sm -mt-10 hidden md:flex">
-          Showing {products.length} of {totalDocs} products based on your filters
+        <div className="text-muted-foreground text-sm -mt-10 hidden md:flex italic">
+          Showing {products.length} products based on your filters
         </div>
       </div>
 

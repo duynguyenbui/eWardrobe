@@ -10,6 +10,7 @@ export const ProductVariants: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
+    defaultColumns: ['name', 'sku', 'barcode', 'upc', 'prices', 'product'],
   },
   access: {
     read: () => true,
@@ -42,12 +43,12 @@ export const ProductVariants: CollectionConfig = {
       defaultValue: () => uuidv4(),
     },
     {
-      name: 'price_set',
-      label: 'Price Set',
+      name: 'prices',
+      label: 'Prices',
       type: 'relationship',
-      relationTo: 'price_sets',
+      relationTo: 'prices',
       required: true,
-      hasMany: false,
+      hasMany: true,
     },
     {
       name: 'priceId',
@@ -72,11 +73,6 @@ export const ProductVariants: CollectionConfig = {
       admin: {
         hidden: true,
       },
-    },
-    {
-      name: 'allow_backorder',
-      type: 'checkbox',
-      label: 'Allow Backorder',
     },
     {
       name: 'weight',
@@ -138,6 +134,26 @@ export const ProductVariants: CollectionConfig = {
       relationTo: 'products',
       hasMany: false,
       required: true,
+    },
+    {
+      name: 'images',
+      type: 'array',
+      label: 'Product images',
+      minRows: 1,
+      maxRows: 4,
+      required: true,
+      labels: {
+        singular: 'Image',
+        plural: 'Images',
+      },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
     },
     {
       name: 'metadata',
