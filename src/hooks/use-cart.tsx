@@ -1,8 +1,7 @@
-import { Product } from '@/payload-types'
 import { create } from 'zustand'
 
 interface CartState {
-  cartItems: Product[]
+  cartItems: string[]
   addItemToCart: (item: string) => void
 }
 

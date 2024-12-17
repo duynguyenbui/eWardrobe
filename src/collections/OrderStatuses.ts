@@ -1,21 +1,25 @@
 import { isAdmin } from '@/payload-roles'
 import type { CollectionConfig } from 'payload'
 
-export const Meterials: CollectionConfig = {
-  slug: 'materials',
-  admin: {
-    useAsTitle: 'material',
-  },
+export const OrderStatuses: CollectionConfig = {
+  slug: 'order_statuses',
   access: {
-    read: () => true,
     create: isAdmin,
+    read: () => true,
     update: isAdmin,
     delete: isAdmin,
   },
+  labels: {
+    singular: 'Order Status',
+    plural: 'Order Statuses',
+  },
+  admin: {
+    useAsTitle: 'name',
+  },
   fields: [
     {
-      name: 'material',
-      label: 'Material',
+      name: 'name',
+      label: 'Name',
       type: 'text',
       required: true,
     },
@@ -23,13 +27,6 @@ export const Meterials: CollectionConfig = {
       name: 'description',
       label: 'Description',
       type: 'textarea',
-    },
-    {
-      name: 'image',
-      label: 'Image',
-      type: 'upload',
-      relationTo: 'media',
-      required: false,
     },
   ],
 }

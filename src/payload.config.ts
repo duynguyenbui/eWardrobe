@@ -1,24 +1,27 @@
 // storage-adapter-import-placeholder
+import path from 'path'
+import sharp from 'sharp'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { stripePlugin } from '@payloadcms/plugin-stripe'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 import { Users } from './collections/Users'
+import { PaymentMethods } from './collections/PaymentMethods'
+import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
-import { ProductCategories } from './collections/ProductCategories'
-import { Products } from './collections/Products'
-import { Meterials } from './collections/Materials'
-import { ProductCollection } from './collections/ProductCollection'
-import { ProductVariants } from './collections/ProductVariants'
-import { Currency } from './collections/Currency'
-import { ProductTypes } from './collections/ProductTypes'
-import { Prices } from './collections/Price'
-import { PriceSets } from './collections/PriceSet'
-import { CustomerAddress } from './collections/CustomerAddress'
+import { ProductEmbeddings } from './collections/ProductEmbeddings'
+import { ImageEmbeddings } from './collections/ImageEmbeddings'
+import { PaymentStatuses } from './collections/PaymentStatuses'
+import { Addresses } from './collections/Addresses'
+import { Colors } from './collections/Colors'
+import { Sizes } from './collections/Size'
+import { ProductDiscounts } from './collections/ProductDiscounts'
+import { OrderStatuses } from './collections/OrderStatuses'
+import { OrderTrackings } from './collections/OrderTrackings'
+import { Coupons } from './collections/Coupons'
+import { Blogs } from './collections/Blogs'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -49,17 +52,20 @@ export default buildConfig({
 
   collections: [
     Users,
+    PaymentMethods,
+    PaymentStatuses,
+    Categories,
     Media,
-    ProductCategories,
-    ProductTypes,
-    Products,
-    Meterials,
-    ProductCollection,
-    ProductVariants,
-    Currency,
-    Prices,
-    PriceSets,
-    CustomerAddress,
+    ProductEmbeddings,
+    ImageEmbeddings,
+    Addresses,
+    Colors,
+    Sizes,
+    ProductDiscounts,
+    OrderStatuses,
+    OrderTrackings,
+    Coupons,
+    Blogs,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

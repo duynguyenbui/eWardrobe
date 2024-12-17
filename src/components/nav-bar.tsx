@@ -3,7 +3,6 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Menu, ShoppingCart, UserCheck2Icon } from 'lucide-react'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from './ui/sheet'
-import { getPayloadClient } from '@/get-payload'
 import { AuthenticationStatus } from './auth-status'
 import { currentUser } from '@/lib/payload'
 import { ModeToggle } from './mode-toggle'
@@ -34,7 +33,7 @@ export const Navbar = async () => {
                 <Link key={item.name} href={item.href} className="text-sm font-medium">
                   {item.name}
                 </Link>
-              ) : user?.role === 'admin' ? (
+              ) : ['admin', 'super_admin'].includes(user?.role || 'user') ? (
                 <Link key={item.name} href={item.href} className="text-sm font-medium">
                   {item.name}
                 </Link>

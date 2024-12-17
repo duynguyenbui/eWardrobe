@@ -20,7 +20,7 @@ const Icon: React.FC<IconProps> = ({
   const router = useRouter()
 
   const back = () => {
-    if (pathname === '/admin') {
+    if (['/admin', '/admin/statistics'].includes(pathname)) {
       router.push('/')
     }
   }

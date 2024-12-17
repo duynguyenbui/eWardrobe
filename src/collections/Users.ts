@@ -1,3 +1,4 @@
+import { isSuperAdmin } from '@/payload-roles'
 import { redirect } from 'next/navigation'
 import type { CollectionConfig } from 'payload'
 
@@ -5,9 +6,9 @@ export const Users: CollectionConfig = {
   slug: 'users',
   access: {
     read: () => true,
-    create: ({ req }) => req.user?.role === 'super_admin',
-    update: ({ req }) => req.user?.role === 'super_admin',
-    delete: ({ req }) => req.user?.role === 'super_admin',
+    create: isSuperAdmin,
+    update: isSuperAdmin,
+    delete: isSuperAdmin,
   },
   admin: {
     hidden: ({ user }) => user?.role === 'user',
@@ -32,14 +33,6 @@ export const Users: CollectionConfig = {
         { label: 'Admin', value: 'admin' },
         { label: 'User', value: 'user' },
       ],
-    },
-    {
-      name: 'customer_address',
-      type: 'relationship',
-      label: 'Customer Address',
-      relationTo: 'customer_address',
-      hasMany: false,
-      required: false,
     },
   ],
 }
