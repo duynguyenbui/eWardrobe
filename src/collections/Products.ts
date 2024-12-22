@@ -6,7 +6,6 @@ import { embedding } from '@/embeddings'
 import { uuidv4 } from '@/lib/uuid'
 
 export const Products: CollectionConfig = {
-  lockDocuments: false,
   slug: 'products',
   access: {
     create: isAdmin,
@@ -29,12 +28,15 @@ export const Products: CollectionConfig = {
               metadata: { name: doc.name, id: doc.id },
             })
 
+            console.log('Product upserted')
+
             const data = await req.payload.update({
               collection: 'products',
               id: doc.id,
               data: {
                 product_embedding: `${doc.id}-embedded`,
               },
+              // req,
             })
 
             console.log('Product embedding upserted')
