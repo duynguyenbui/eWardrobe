@@ -15,6 +15,7 @@ export const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
+    description: 'Categories for products that are used to group products together',
   },
   fields: [
     {
@@ -30,30 +31,9 @@ export const Categories: CollectionConfig = {
       required: true,
     },
     {
-      name: 'created_at',
-      label: 'Created At',
-      type: 'date',
-      required: true,
-      defaultValue: () => new Date(),
-      admin: {
-        readOnly: true,
-        date: {
-          displayFormat: 'd MMM yyy',
-        },
-      },
-    },
-    {
-      name: 'updated_at',
-      label: 'Updated At',
-      type: 'date',
-      required: true,
-      defaultValue: () => new Date(),
-      admin: {
-        readOnly: true,
-        date: {
-          displayFormat: 'd MMM yyy',
-        },
-      },
+      name: 'description',
+      label: 'Description',
+      type: 'textarea',
     },
     {
       name: 'category_parent',

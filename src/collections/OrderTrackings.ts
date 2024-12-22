@@ -19,22 +19,41 @@ export const OrderTrackings: CollectionConfig = {
       label: 'Begin At',
       type: 'date',
       admin: {
-        readOnly: true,
         date: {
           pickerAppearance: 'dayAndTime',
         },
       },
+      required: true,
     },
     {
       name: 'end_at',
       label: 'End At',
       type: 'date',
       admin: {
-        readOnly: true,
         date: {
           pickerAppearance: 'dayAndTime',
         },
       },
+      required: true,
+    },
+    {
+      name: 'order_status',
+      label: 'Order Status',
+      type: 'relationship',
+      relationTo: 'order_statuses',
+      hasMany: false,
+      required: true,
+    },
+    {
+      name: 'order',
+      label: 'Order',
+      type: 'relationship',
+      relationTo: 'orders',
+      hasMany: false,
+      admin: {
+        readOnly: true,
+      },
+      required: true,
     },
   ],
 }

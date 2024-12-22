@@ -3,7 +3,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PayloadUserValidator, TPayloadUserValidator } from '@/validators'
+import { PayloadUserSignUpValidator, TPayloadUserSignUpValidator } from '@/validators'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -29,15 +29,17 @@ import { useRouter } from 'next/navigation'
 
 const SignUpPage = () => {
   const router = useRouter()
-  const form = useForm<TPayloadUserValidator>({
-    resolver: zodResolver(PayloadUserValidator),
+  const form = useForm<TPayloadUserSignUpValidator>({
+    resolver: zodResolver(PayloadUserSignUpValidator),
     defaultValues: {
       email: '',
       password: '',
+      phoneNumber: '',
+      dateOfBirth: '',
     },
   })
 
-  const onSubmit = async (data: TPayloadUserValidator) => {
+  const onSubmit = async (data: TPayloadUserSignUpValidator) => {
     try {
       const res = await createUser(data)
 
@@ -62,7 +64,7 @@ const SignUpPage = () => {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
-          <CardDescription>Enter your credentials to access your account</CardDescription>
+          <CardDescription>Enter your details to create an account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -95,6 +97,34 @@ const SignUpPage = () => {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your phone number" {...field} type="tel" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date of Birth</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="date" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" className="w-full">
                 Sign Up
               </Button>
@@ -103,7 +133,7 @@ const SignUpPage = () => {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-600">
-            Having an account?{' '}
+            Already have an account?{' '}
             <Link href="/login" className="text-blue-600 hover:underline">
               Login here
             </Link>

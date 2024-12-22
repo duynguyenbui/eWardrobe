@@ -1,7 +1,7 @@
 {
   "name": "ewardrobe",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "ewardrobe, a project for clothing management",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -20,20 +20,25 @@
     "@payloadcms/db-postgres": "latest",
     "@payloadcms/next": "latest",
     "@payloadcms/payload-cloud": "latest",
-    "@payloadcms/plugin-stripe": "^3.7.0",
+    "@payloadcms/plugin-stripe": "^3.6.0",
     "@payloadcms/richtext-lexical": "latest",
+    "@payloadcms/ui": "^3.10.0",
     "@radix-ui/react-avatar": "^1.1.2",
-    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-checkbox": "^1.1.3",
+    "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-dropdown-menu": "^2.1.3",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-select": "^2.1.3",
-    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tabs": "^1.1.2",
+    "@talkjs/react": "^0.1.11",
     "@upstash/qstash": "^2.7.19",
     "@upstash/redis": "^1.34.3",
     "@upstash/vector": "^1.1.7",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "crisp-sdk-web": "^1.0.25",
     "cross-env": "^7.0.3",
     "graphql": "^16.8.1",
     "lucide-react": "^0.468.0",
@@ -48,6 +53,7 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "talkjs": "^0.33.0",
     "zod": "^3.24.1",
     "zustand": "^5.0.2"
   },
@@ -68,5 +74,6 @@
   },
   "engines": {
     "node": "^18.20.2 || >=20.9.0"
-  }
+  },
+  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
 }

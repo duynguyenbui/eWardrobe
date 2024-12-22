@@ -15,6 +15,7 @@ export const PaymentMethods: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
+    description: 'Payment methods for orders that are used to group orders together',
   },
   fields: [
     {
@@ -22,6 +23,12 @@ export const PaymentMethods: CollectionConfig = {
       label: 'Name',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'active',
+      label: 'Active',
+      type: 'checkbox',
+      defaultValue: true,
     },
   ],
 }

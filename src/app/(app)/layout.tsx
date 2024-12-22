@@ -1,15 +1,15 @@
 import { ReactNode } from 'react'
 import { Toaster } from '@/components/ui/sonner'
-import { Inter as FontSans } from 'next/font/google'
 
 type LayoutProps = {
   children: ReactNode
 }
 
-import '../globals.css'
+import '../global.css'
 import { Navbar } from '@/components/nav-bar'
 import { Metadata } from 'next'
 import { ThemeProvider } from '@/components/provider/theme-provider'
+import { ModalProvider } from '@/components/provider/modal-provider'
 
 export const metadata: Metadata = {
   title: 'eWardrobe',
@@ -34,7 +34,8 @@ const Layout = ({ children }: LayoutProps) => {
           <main>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">{children}</div>
           </main>
-          <Toaster />
+          <Toaster position="top-right" theme="system" />
+          <ModalProvider />
         </ThemeProvider>
       </body>
     </html>

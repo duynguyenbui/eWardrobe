@@ -46,7 +46,8 @@ export default async function Home() {
               <div className="w-full max-w-full overflow-hidden">
                 <Image
                   alt="eWardrobe App Screenshot"
-                  className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center"
+                  priority
+                  className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center w-auto h-auto"
                   height="310"
                   src="/placeholder.svg"
                   width="550"

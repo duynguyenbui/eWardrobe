@@ -26,7 +26,7 @@ const Statistics: React.FC<AdminViewProps> = async ({ initPageResult, params, se
         <h1 className="text-5xl font-bold">Custom Component goes here</h1>
         <p className="text-muted-foreground text-lg font-semibold">Customed by duynguyenbui</p>
       </Gutter>
-    </DefaultTemplate>
+    </DefaultTemplate>  
   )
 }
 

@@ -12,20 +12,26 @@ export interface Config {
   };
   collections: {
     users: User;
+    products: Product;
+    variants: Variant;
+    product_discounts: ProductDiscount;
+    orders: Order;
+    order_details: OrderDetail;
+    order_trackings: OrderTracking;
+    coupons: Coupon;
+    comments: Comment;
+    addresses: Address;
+    order_statuses: OrderStatus;
+    colors: Color;
+    sizes: Size;
+    payments: Payment;
     payment_methods: PaymentMethod;
     payment_statuses: PaymentStatus;
     categories: Category;
     media: Media;
     product_embeddings: ProductEmbedding;
     image_embeddings: ImageEmbedding;
-    addresses: Address;
-    colors: Color;
-    sizes: Size;
-    product_discounts: ProductDiscount;
-    order_statuses: OrderStatus;
-    order_trackings: OrderTracking;
-    coupons: Coupon;
-    blogs: Blog;
+    conversations: Conversation;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -33,20 +39,26 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    variants: VariantsSelect<false> | VariantsSelect<true>;
+    product_discounts: ProductDiscountsSelect<false> | ProductDiscountsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    order_details: OrderDetailsSelect<false> | OrderDetailsSelect<true>;
+    order_trackings: OrderTrackingsSelect<false> | OrderTrackingsSelect<true>;
+    coupons: CouponsSelect<false> | CouponsSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
+    addresses: AddressesSelect<false> | AddressesSelect<true>;
+    order_statuses: OrderStatusesSelect<false> | OrderStatusesSelect<true>;
+    colors: ColorsSelect<false> | ColorsSelect<true>;
+    sizes: SizesSelect<false> | SizesSelect<true>;
+    payments: PaymentsSelect<false> | PaymentsSelect<true>;
     payment_methods: PaymentMethodsSelect<false> | PaymentMethodsSelect<true>;
     payment_statuses: PaymentStatusesSelect<false> | PaymentStatusesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     product_embeddings: ProductEmbeddingsSelect<false> | ProductEmbeddingsSelect<true>;
     image_embeddings: ImageEmbeddingsSelect<false> | ImageEmbeddingsSelect<true>;
-    addresses: AddressesSelect<false> | AddressesSelect<true>;
-    colors: ColorsSelect<false> | ColorsSelect<true>;
-    sizes: SizesSelect<false> | SizesSelect<true>;
-    product_discounts: ProductDiscountsSelect<false> | ProductDiscountsSelect<true>;
-    order_statuses: OrderStatusesSelect<false> | OrderStatusesSelect<true>;
-    order_trackings: OrderTrackingsSelect<false> | OrderTrackingsSelect<true>;
-    coupons: CouponsSelect<false> | CouponsSelect<true>;
-    blogs: BlogsSelect<false> | BlogsSelect<true>;
+    conversations: ConversationsSelect<false> | ConversationsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -89,7 +101,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  avatar?: (number | null) | Media;
   role: 'super_admin' | 'admin' | 'user';
+  date_of_birth: string;
+  phone_number?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -100,40 +115,6 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payment_methods".
- */
-export interface PaymentMethod {
-  id: number;
-  name: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payment_statuses".
- */
-export interface PaymentStatus {
-  id: number;
-  name: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  created_at: string;
-  updated_at: string;
-  category_parent?: (number | Category)[] | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -156,6 +137,134 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  name: string;
+  description?: string | null;
+  visible?: boolean | null;
+  price: number;
+  overview?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  material?: string | null;
+  instruction?: string | null;
+  slug: string;
+  sold_number?: number | null;
+  category?: (number | null) | Category;
+  variants?: (number | Variant)[] | null;
+  colors?: (number | Color)[] | null;
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
+  product_discounts?: (number | ProductDiscount)[] | null;
+  product_reviews?: (number | Comment)[] | null;
+  product_embedding?: (number | null) | ProductEmbedding;
+  product_image_embeddings?: (number | ImageEmbedding)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Categories for products that are used to group products together
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  category_parent?: (number | Category)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants".
+ */
+export interface Variant {
+  id: number;
+  quantity: number;
+  size?: (number | null) | Size;
+  color?: (number | null) | Color;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sizes".
+ */
+export interface Size {
+  id: number;
+  name: string;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Colors for products that are used to group products together
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "colors".
+ */
+export interface Color {
+  id: number;
+  name: string;
+  description?: string | null;
+  images?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_discounts".
+ */
+export interface ProductDiscount {
+  id: number;
+  name: string;
+  description?: string | null;
+  start_date: string;
+  end_date: string;
+  discount_type: string;
+  discount_value: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Comments for products that are conducted by customers
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments".
+ */
+export interface Comment {
+  id: number;
+  comment: string;
+  user: number | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "product_embeddings".
  */
 export interface ProductEmbedding {
@@ -173,6 +282,37 @@ export interface ImageEmbedding {
   id: number;
   product_id: string;
   image_embedding: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  total_price: number;
+  total_discount: number;
+  final_price: number;
+  shipping_fee: number;
+  buyer: number | User;
+  current_status: number | OrderStatus;
+  dilivery_address: number | Address;
+  order_tracking: number | OrderTracking;
+  used_coupon?: (number | null) | Coupon;
+  order_details?: (number | OrderDetail)[] | null;
+  order_trackings?: (number | OrderTracking)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "order_statuses".
+ */
+export interface OrderStatus {
+  id: number;
+  status: string;
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -252,108 +392,12 @@ export interface Address {
     | null;
   district: string;
   ward_code: string;
-  detail_address: string;
+  detail_address?: string | null;
   contact_name: string;
   contact_phone: string;
   id_default?: boolean | null;
   is_deleted?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "colors".
- */
-export interface Color {
-  id: number;
-  description?: string | null;
-  name: (
-    | 'red'
-    | 'green'
-    | 'blue'
-    | 'yellow'
-    | 'orange'
-    | 'purple'
-    | 'pink'
-    | 'black'
-    | 'white'
-    | 'gray'
-    | 'brown'
-    | 'cyan'
-    | 'magenta'
-    | 'lime'
-    | 'teal'
-    | 'indigo'
-    | 'violet'
-    | 'maroon'
-    | 'olive'
-    | 'navy'
-    | 'gold'
-    | 'silver'
-    | 'beige'
-    | 'peach'
-    | 'turquoise'
-    | 'mint'
-    | 'lavender'
-    | 'coral'
-    | 'salmon'
-    | 'khaki'
-    | 'crimson'
-    | 'azure'
-    | 'amethyst'
-    | 'plum'
-    | 'saffron'
-    | 'charcoal'
-    | 'ivory'
-    | 'periwinkle'
-    | 'scarlet'
-    | 'emerald'
-    | 'rust'
-    | 'tan'
-    | 'burgundy'
-    | 'ochre'
-    | 'ruby'
-    | 'onyx'
-    | 'sand'
-    | 'steel'
-  )[];
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sizes".
- */
-export interface Size {
-  id: number;
-  name: string;
-  description?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product_discounts".
- */
-export interface ProductDiscount {
-  id: number;
-  name: string;
-  description?: string | null;
-  start_date: string;
-  end_date: string;
-  discount_type: string;
-  discount_value: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "order_statuses".
- */
-export interface OrderStatus {
-  id: number;
-  name: string;
-  description?: string | null;
+  user: number | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -363,8 +407,10 @@ export interface OrderStatus {
  */
 export interface OrderTracking {
   id: number;
-  begin_at?: string | null;
-  end_at?: string | null;
+  begin_at: string;
+  end_at: string;
+  order_status: number | OrderStatus;
+  order: number | Order;
   updatedAt: string;
   createdAt: string;
 }
@@ -375,31 +421,93 @@ export interface OrderTracking {
 export interface Coupon {
   id: number;
   code: string;
-  discount_type: string;
-  total_discount: number;
-  start_date?: string | null;
-  end_date?: string | null;
+  discount_type: 'fixed_amount' | 'percentage';
+  discount: number;
+  start_date: string;
+  end_date: string;
+  description?: string | null;
   quantity: number;
   visible?: boolean | null;
   collected_quantity: number;
-  current_use?: number | null;
+  current_use: number;
   minimum_price_to_use: number;
-  created_at: string;
-  updated_at: string;
+  collected_users?: (number | User)[] | null;
+  used_users?: (number | User)[] | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blogs".
+ * via the `definition` "order_details".
  */
-export interface Blog {
+export interface OrderDetail {
   id: number;
-  title: string;
-  slug: string;
-  content: string;
-  published?: boolean | null;
-  published_at?: string | null;
+  quantity: number;
+  price: number;
+  discount?: number | null;
+  variant?: (number | null) | Variant;
+  order?: (number | null) | Order;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments".
+ */
+export interface Payment {
+  id: number;
+  amount: number;
+  payment_method: number | PaymentMethod;
+  payment_status: number | PaymentStatus;
+  order: number | Order;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Payment methods for orders that are used to group orders together
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payment_methods".
+ */
+export interface PaymentMethod {
+  id: number;
+  name: string;
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The payment is not yet completed or is awaiting confirmation. This status usually indicates that the order has been received, but the payment process has not been finalized.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payment_statuses".
+ */
+export interface PaymentStatus {
+  id: number;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Bots that are used to interact with users
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "conversations".
+ */
+export interface Conversation {
+  id: number;
+  bot_id: string;
+  con_id: string;
+  user: number | User;
+  messages?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -413,6 +521,58 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'variants';
+        value: number | Variant;
+      } | null)
+    | ({
+        relationTo: 'product_discounts';
+        value: number | ProductDiscount;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'order_details';
+        value: number | OrderDetail;
+      } | null)
+    | ({
+        relationTo: 'order_trackings';
+        value: number | OrderTracking;
+      } | null)
+    | ({
+        relationTo: 'coupons';
+        value: number | Coupon;
+      } | null)
+    | ({
+        relationTo: 'comments';
+        value: number | Comment;
+      } | null)
+    | ({
+        relationTo: 'addresses';
+        value: number | Address;
+      } | null)
+    | ({
+        relationTo: 'order_statuses';
+        value: number | OrderStatus;
+      } | null)
+    | ({
+        relationTo: 'colors';
+        value: number | Color;
+      } | null)
+    | ({
+        relationTo: 'sizes';
+        value: number | Size;
+      } | null)
+    | ({
+        relationTo: 'payments';
+        value: number | Payment;
       } | null)
     | ({
         relationTo: 'payment_methods';
@@ -439,36 +599,8 @@ export interface PayloadLockedDocument {
         value: number | ImageEmbedding;
       } | null)
     | ({
-        relationTo: 'addresses';
-        value: number | Address;
-      } | null)
-    | ({
-        relationTo: 'colors';
-        value: number | Color;
-      } | null)
-    | ({
-        relationTo: 'sizes';
-        value: number | Size;
-      } | null)
-    | ({
-        relationTo: 'product_discounts';
-        value: number | ProductDiscount;
-      } | null)
-    | ({
-        relationTo: 'order_statuses';
-        value: number | OrderStatus;
-      } | null)
-    | ({
-        relationTo: 'order_trackings';
-        value: number | OrderTracking;
-      } | null)
-    | ({
-        relationTo: 'coupons';
-        value: number | Coupon;
-      } | null)
-    | ({
-        relationTo: 'blogs';
-        value: number | Blog;
+        relationTo: 'conversations';
+        value: number | Conversation;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -517,7 +649,10 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  avatar?: T;
   role?: T;
+  date_of_birth?: T;
+  phone_number?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -530,10 +665,207 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  visible?: T;
+  price?: T;
+  overview?: T;
+  material?: T;
+  instruction?: T;
+  slug?: T;
+  sold_number?: T;
+  category?: T;
+  variants?: T;
+  colors?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  product_discounts?: T;
+  product_reviews?: T;
+  product_embedding?: T;
+  product_image_embeddings?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "variants_select".
+ */
+export interface VariantsSelect<T extends boolean = true> {
+  quantity?: T;
+  size?: T;
+  color?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product_discounts_select".
+ */
+export interface ProductDiscountsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  start_date?: T;
+  end_date?: T;
+  discount_type?: T;
+  discount_value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  total_price?: T;
+  total_discount?: T;
+  final_price?: T;
+  shipping_fee?: T;
+  buyer?: T;
+  current_status?: T;
+  dilivery_address?: T;
+  order_tracking?: T;
+  used_coupon?: T;
+  order_details?: T;
+  order_trackings?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "order_details_select".
+ */
+export interface OrderDetailsSelect<T extends boolean = true> {
+  quantity?: T;
+  price?: T;
+  discount?: T;
+  variant?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "order_trackings_select".
+ */
+export interface OrderTrackingsSelect<T extends boolean = true> {
+  begin_at?: T;
+  end_at?: T;
+  order_status?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons_select".
+ */
+export interface CouponsSelect<T extends boolean = true> {
+  code?: T;
+  discount_type?: T;
+  discount?: T;
+  start_date?: T;
+  end_date?: T;
+  description?: T;
+  quantity?: T;
+  visible?: T;
+  collected_quantity?: T;
+  current_use?: T;
+  minimum_price_to_use?: T;
+  collected_users?: T;
+  used_users?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments_select".
+ */
+export interface CommentsSelect<T extends boolean = true> {
+  comment?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "addresses_select".
+ */
+export interface AddressesSelect<T extends boolean = true> {
+  name?: T;
+  province?: T;
+  district?: T;
+  ward_code?: T;
+  detail_address?: T;
+  contact_name?: T;
+  contact_phone?: T;
+  id_default?: T;
+  is_deleted?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "order_statuses_select".
+ */
+export interface OrderStatusesSelect<T extends boolean = true> {
+  status?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "colors_select".
+ */
+export interface ColorsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sizes_select".
+ */
+export interface SizesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments_select".
+ */
+export interface PaymentsSelect<T extends boolean = true> {
+  amount?: T;
+  payment_method?: T;
+  payment_status?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payment_methods_select".
  */
 export interface PaymentMethodsSelect<T extends boolean = true> {
   name?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -553,8 +885,7 @@ export interface PaymentStatusesSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
-  created_at?: T;
-  updated_at?: T;
+  description?: T;
   category_parent?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -599,105 +930,13 @@ export interface ImageEmbeddingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "addresses_select".
+ * via the `definition` "conversations_select".
  */
-export interface AddressesSelect<T extends boolean = true> {
-  name?: T;
-  province?: T;
-  district?: T;
-  ward_code?: T;
-  detail_address?: T;
-  contact_name?: T;
-  contact_phone?: T;
-  id_default?: T;
-  is_deleted?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "colors_select".
- */
-export interface ColorsSelect<T extends boolean = true> {
-  description?: T;
-  name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sizes_select".
- */
-export interface SizesSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product_discounts_select".
- */
-export interface ProductDiscountsSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  start_date?: T;
-  end_date?: T;
-  discount_type?: T;
-  discount_value?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "order_statuses_select".
- */
-export interface OrderStatusesSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "order_trackings_select".
- */
-export interface OrderTrackingsSelect<T extends boolean = true> {
-  begin_at?: T;
-  end_at?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "coupons_select".
- */
-export interface CouponsSelect<T extends boolean = true> {
-  code?: T;
-  discount_type?: T;
-  total_discount?: T;
-  start_date?: T;
-  end_date?: T;
-  quantity?: T;
-  visible?: T;
-  collected_quantity?: T;
-  current_use?: T;
-  minimum_price_to_use?: T;
-  created_at?: T;
-  updated_at?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blogs_select".
- */
-export interface BlogsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  content?: T;
-  published?: T;
-  published_at?: T;
+export interface ConversationsSelect<T extends boolean = true> {
+  bot_id?: T;
+  con_id?: T;
+  user?: T;
+  messages?: T;
   updatedAt?: T;
   createdAt?: T;
 }

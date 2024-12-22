@@ -13,13 +13,10 @@ export const OrderStatuses: CollectionConfig = {
     singular: 'Order Status',
     plural: 'Order Statuses',
   },
-  admin: {
-    useAsTitle: 'name',
-  },
   fields: [
     {
-      name: 'name',
-      label: 'Name',
+      name: 'status',
+      label: 'Status',
       type: 'text',
       required: true,
     },

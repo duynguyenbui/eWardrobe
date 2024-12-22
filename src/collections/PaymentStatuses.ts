@@ -15,6 +15,8 @@ export const PaymentStatuses: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
+    description:
+      'The payment is not yet completed or is awaiting confirmation. This status usually indicates that the order has been received, but the payment process has not been finalized.',
   },
   fields: [
     {

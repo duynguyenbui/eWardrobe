@@ -23,6 +23,14 @@ export const Users: CollectionConfig = {
   },
   fields: [
     {
+      name: 'avatar',
+      label: 'Avatar',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: false,
+      required: false,
+    },
+    {
       name: 'role',
       defaultValue: 'user',
       required: true,
@@ -33,6 +41,23 @@ export const Users: CollectionConfig = {
         { label: 'Admin', value: 'admin' },
         { label: 'User', value: 'user' },
       ],
+    },
+    {
+      name: 'date_of_birth',
+      label: 'Date of Birth',
+      type: 'date',
+      required: true,
+      admin: {
+        date: {
+          pickerAppearance: 'default',
+        },
+      },
+    },
+    {
+      name: 'phone_number',
+      label: 'Phone Number',
+      type: 'text',
+      required: false,
     },
   ],
 }

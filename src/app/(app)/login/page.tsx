@@ -3,7 +3,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PayloadUserValidator, TPayloadUserValidator } from '@/validators'
+import { PayloadUserLoginValidator, TPayloadUserLoginValidator } from '@/validators'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -30,19 +30,22 @@ import { useAuth } from '@/hooks/use-auth'
 const LoginPage = () => {
   const router = useRouter()
   const { login } = useAuth()
-  const form = useForm<TPayloadUserValidator>({
-    resolver: zodResolver(PayloadUserValidator),
+  const form = useForm<TPayloadUserLoginValidator>({
+    resolver: zodResolver(PayloadUserLoginValidator),
     defaultValues: {
       email: '',
       password: '',
     },
   })
 
-  const onSubmit = async (data: TPayloadUserValidator) => {
+  const onSubmit = (data: TPayloadUserLoginValidator) => {
     try {
-      const { email, password } = PayloadUserValidator.parse(data)
+      const { email, password } = PayloadUserLoginValidator.parse(data)
 
-      await login(email, password)
+      login(email, password)
+      router.refresh()
+      router.prefetch('/')
+      router.push('/')
     } catch (error) {
       toast.error('Something went wrong')
     } finally {

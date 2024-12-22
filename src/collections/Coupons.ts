@@ -15,23 +15,39 @@ export const Coupons: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'code',
+    defaultColumns: [
+      'code',
+      'discount_type',
+      'discount',
+      'start_date',
+      'end_date',
+      'visible',
+      'quantity',
+      'current_use',
+      'minimum_price_to_use',
+    ],
   },
   fields: [
     {
       name: 'code',
       label: 'Code',
       type: 'text',
+      unique: true,
       required: true,
     },
     {
       name: 'discount_type',
       label: 'Discount Type',
-      type: 'text',
+      type: 'select',
+      options: [
+        { label: 'Fixed Amount', value: 'fixed_amount' },
+        { label: 'Percentage', value: 'percentage' },
+      ],
       required: true,
     },
     {
-      name: 'total_discount',
-      label: 'Total Discount',
+      name: 'discount',
+      label: 'Discount',
       type: 'number',
       required: true,
     },
@@ -39,6 +55,7 @@ export const Coupons: CollectionConfig = {
       name: 'start_date',
       label: 'Start Date',
       type: 'date',
+      required: true,
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',
@@ -49,11 +66,17 @@ export const Coupons: CollectionConfig = {
       name: 'end_date',
       label: 'End Date',
       type: 'date',
+      required: true,
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',
         },
       },
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      type: 'textarea',
     },
     {
       name: 'quantity',
@@ -77,6 +100,7 @@ export const Coupons: CollectionConfig = {
       required: true,
       defaultValue: 0,
       admin: {
+        readOnly: true,
         position: 'sidebar',
       },
     },
@@ -84,8 +108,10 @@ export const Coupons: CollectionConfig = {
       name: 'current_use',
       label: 'Current Use',
       type: 'number',
+      required: true,
       defaultValue: 0,
       admin: {
+        readOnly: true,
         position: 'sidebar',
       },
     },
@@ -99,34 +125,18 @@ export const Coupons: CollectionConfig = {
       },
     },
     {
-      name: 'created_at',
-      label: 'Created At',
-      type: 'date',
-      required: true,
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        date: {
-          displayFormat: 'd MMM yyy',
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-      defaultValue: () => new Date(),
+      name: 'collected_users',
+      label: 'Collected Users',
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: true,
     },
     {
-      name: 'updated_at',
-      label: 'Updated At',
-      type: 'date',
-      required: true,
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        date: {
-          displayFormat: 'd MMM yyy',
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-      defaultValue: () => new Date(),
+      name: 'used_users',
+      label: 'Used Users',
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: true,
     },
   ],
 }

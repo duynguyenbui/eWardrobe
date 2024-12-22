@@ -1,6 +1,6 @@
 'use client'
 
-import { LogIn, LogOut, UserMinus2, UserPlus2 } from 'lucide-react'
+import { LogIn, LogOut, UserPlus2 } from 'lucide-react'
 import { Button, buttonVariants } from './ui/button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'

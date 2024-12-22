@@ -21,12 +21,24 @@ import { ProductDiscounts } from './collections/ProductDiscounts'
 import { OrderStatuses } from './collections/OrderStatuses'
 import { OrderTrackings } from './collections/OrderTrackings'
 import { Coupons } from './collections/Coupons'
-import { Blogs } from './collections/Blogs'
+import { Variants } from './collections/Variants'
+import { Products } from './collections/Products'
+import { Orders } from './collections/Order'
+import { OrderDetails } from './collections/OrderDetails'
+import { Payments } from './collections/Payment'
+import { seed } from './seed'
+import { Comments } from './collections/Comments'
+import { Conversations } from './collections/Conversations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  onInit: async (payload) => {
+    if (process.env.PAYLOAD_SEED === 'true') {
+      await seed(payload)
+    }
+  },
   admin: {
     user: Users.slug,
     importMap: {
@@ -49,23 +61,31 @@ export default buildConfig({
       },
     },
   },
-
+  graphQL: {
+    disable: true,
+  },
   collections: [
     Users,
+    Products,
+    Variants,
+    ProductDiscounts,
+    Orders,
+    OrderDetails,
+    OrderTrackings,
+    Coupons,
+    Comments,
+    Addresses,
+    OrderStatuses,
+    Colors,
+    Sizes,
+    Payments,
     PaymentMethods,
     PaymentStatuses,
     Categories,
     Media,
     ProductEmbeddings,
     ImageEmbeddings,
-    Addresses,
-    Colors,
-    Sizes,
-    ProductDiscounts,
-    OrderStatuses,
-    OrderTrackings,
-    Coupons,
-    Blogs,
+    Conversations,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

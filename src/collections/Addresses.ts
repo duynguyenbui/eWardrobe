@@ -1,4 +1,4 @@
-import { VIETNAM_PROVINCES } from '@/constants/constant'
+import { VIETNAM_PROVINCES } from '@/constants/constants'
 import { isAdmin } from '@/payload-roles'
 import type { CollectionConfig } from 'payload'
 
@@ -15,7 +15,17 @@ export const Addresses: CollectionConfig = {
     plural: 'Addresses',
   },
   admin: {
-    useAsTitle: 'name',
+    useAsTitle: 'id',
+    defaultColumns: [
+      'id',
+      'name',
+      'province',
+      'district',
+      'ward_code',
+      'contact_name',
+      'id_default',
+      'is_deleted',
+    ],
   },
   fields: [
     {
@@ -46,7 +56,6 @@ export const Addresses: CollectionConfig = {
       name: 'detail_address',
       label: 'Detail Address',
       type: 'textarea',
-      required: true,
     },
     {
       name: 'contact_name',
@@ -64,16 +73,21 @@ export const Addresses: CollectionConfig = {
       name: 'id_default',
       label: 'Default Address',
       type: 'checkbox',
-      defaultValue: true,
+      defaultValue: false,
     },
     {
       name: 'is_deleted',
       label: 'Is Deleted',
       type: 'checkbox',
       defaultValue: false,
-      admin: {
-        readOnly: true,
-      },
+    },
+    {
+      name: 'user',
+      label: 'User',
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: false,
+      required: true,
     },
   ],
 }
