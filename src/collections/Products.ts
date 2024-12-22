@@ -1,3 +1,6 @@
+import { getPayloadClient } from '@/get-payload'
+import { embedding } from '../embeddings'
+import { index } from '../vector'
 import { isAdmin } from '@/payload-roles'
 import type { CollectionConfig } from 'payload'
 
@@ -8,6 +11,30 @@ export const Products: CollectionConfig = {
     read: () => true,
     update: isAdmin,
     delete: isAdmin,
+  },
+  hooks: {
+    afterChange: [
+      async ({ collection, context, req, operation, previousDoc, doc }) => {
+        if (embedding || index) {
+          console.log(doc)
+          console.log('embedding is enabled')
+          const payload = await getPayloadClient()
+        } else {
+          console.log('embedding is disabled')
+        }
+      },
+    ],
+    afterDelete: [
+      async ({ collection, context, id }) => {
+        if (embedding || index) {
+          console.log(id)
+          console.log('embedding is enabled')
+          const payload = await getPayloadClient()
+        } else {
+          console.log('embedding is disabled')
+        }
+      },
+    ],
   },
   labels: {
     singular: 'Products',

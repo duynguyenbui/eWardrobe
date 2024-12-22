@@ -2,6 +2,7 @@ export interface Message {
   role: 'user' | 'assistant' | 'system'
   content: string
   senderId: string
+  createdAt: number
 }
 
 export interface TalkJSMessages {

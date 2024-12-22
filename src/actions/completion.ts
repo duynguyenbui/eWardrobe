@@ -1,17 +1,14 @@
 'use server'
 
 import { completion } from '@/completion'
-import { AI_INSTRUCTIONS } from '@/constants/constants'
 import { Message, TalkJSMessages } from '@/types'
 import axios from 'axios'
 
 export const getCompletion = async (histories: Message[]) => {
-  const instructions: Message[] = AI_INSTRUCTIONS
-
   if (completion) {
     const res = await completion.chat.completions.create({
       messages: histories,
-      model: 'gpt-3.5-turbo',
+      model: 'TheBloke/stablelm-zephyr-3b-GGUF/stablelm-zephyr-3b.Q4_K_S.gguf',
     })
 
     const reply = res.choices[0].message.content

@@ -2,10 +2,7 @@ import { getAllMessages, getCompletion, sendMessage } from '@/actions/completion
 import { getPayloadClient } from '@/get-payload'
 import { Message } from '@/types'
 
-export const dynamic = 'force-static'
-const appId = process.env.TALKJS_APP_ID || ''
-const talkJSSecretKey = process.env.TALKJS_SECRET_KEY || ''
-const basePath = process.env.TALKJS_BASE_PATH || 'https://api.talkjs.com'
+export const dynamic = 'force-dynamic'
 const botId = process.env.TALK_BOT_USER_ID || 'stablelm-zephyr-3b-GGUF'
 
 export async function POST(req: Request) {
@@ -37,62 +34,38 @@ export async function POST(req: Request) {
     },
   })
 
-  if (totalDocs === 0 && senderId != botId) {
+  if (totalDocs === 0 && senderId !== botId) {
     await payload.create({
       collection: 'conversations',
       data: {
         bot_id: botId,
         con_id: convId,
         user: parseInt(senderId, 10),
+        messages: [],
       },
     })
   }
 
   const convers = conversations[0]
 
-  if (!convers) {
+  if (!convers && senderId === botId) {
     return Response.json({}, { status: 200 })
   }
 
   const { data: historyMessages } = await getAllMessages(convId)
 
-  let messages: Message[] = historyMessages.map((message) => {
-    return {
-      role: message.senderId === botId ? 'assistant' : 'user',
-      content: message.text,
-      senderId: message.senderId,
-    }
-  })
-
-  const newMsg: Message = {
-    role: 'user',
+  let messages: Message[] = historyMessages.map((message) => ({
+    role: message.senderId === botId ? 'assistant' : 'user',
     content: message.text,
-    senderId: senderId,
-  }
+    senderId: message.senderId,
+    createdAt: message.createdAt,
+  }))
 
-  messages.push(newMsg)
-
-  if (senderId == botId) {
-    if (!messages.some((msg) => msg.senderId === botId && msg.content === messageText)) {
-      messages.push({ role: 'assistant', content: messageText, senderId: botId })
-    }
-  } else {
+  if (senderId !== botId) {
     const reply = (await getCompletion(messages)) || 'I am not available right now.'
-    if (!messages.some((msg) => msg.senderId === senderId && msg.content === reply)) {
-      messages.push({ role: 'user', content: reply, senderId: senderId })
-    }
+
     await sendMessage(reply, botId, convId)
   }
-
-  const { data: updatedData } = await getAllMessages(convId)
-
-  const upatedMsg = updatedData.map((data) => {
-    return {
-      role: data.senderId === botId ? 'assistant' : 'user',
-      content: data.text,
-      senderId: data.senderId,
-    }
-  })
 
   await payload.update({
     collection: 'conversations',
@@ -102,7 +75,7 @@ export async function POST(req: Request) {
       },
     },
     data: {
-      messages: upatedMsg,
+      messages: messages.filter((msg) => msg.senderId !== botId),
     },
   })
 
