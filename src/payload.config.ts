@@ -11,7 +11,6 @@ import { Users } from './collections/Users'
 import { PaymentMethods } from './collections/PaymentMethods'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
-import { ProductEmbeddings } from './collections/ProductEmbeddings'
 import { ImageEmbeddings } from './collections/ImageEmbeddings'
 import { PaymentStatuses } from './collections/PaymentStatuses'
 import { Addresses } from './collections/Addresses'
@@ -83,7 +82,6 @@ export default buildConfig({
     PaymentStatuses,
     Categories,
     Media,
-    ProductEmbeddings,
     ImageEmbeddings,
     Conversations,
   ],

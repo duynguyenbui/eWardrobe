@@ -1,10 +1,12 @@
-import { getPayloadClient } from '@/get-payload'
-import { embedding } from '../embeddings'
-import { index } from '../vector'
 import { isAdmin } from '@/payload-roles'
 import type { CollectionConfig } from 'payload'
+import { getTextEmbedding } from '@/actions/embeddings'
+import { index } from '@/vector'
+import { embedding } from '@/embeddings'
+import { uuidv4 } from '@/lib/uuid'
 
 export const Products: CollectionConfig = {
+  lockDocuments: false,
   slug: 'products',
   access: {
     create: isAdmin,
@@ -14,24 +16,41 @@ export const Products: CollectionConfig = {
   },
   hooks: {
     afterChange: [
-      async ({ collection, context, req, operation, previousDoc, doc }) => {
-        if (embedding || index) {
-          console.log(doc)
-          console.log('embedding is enabled')
-          const payload = await getPayloadClient()
-        } else {
-          console.log('embedding is disabled')
+      async ({ doc, req, operation }) => {
+        if (embedding) {
+          const vector = await getTextEmbedding(
+            `${doc.name} ${doc.description} ${doc.overview} ${doc.material} ${doc.instruction}`,
+          )
+
+          if (vector && index) {
+            await index.upsert({
+              id: doc.id,
+              vector: vector,
+              metadata: { name: doc.name, id: doc.id },
+            })
+
+            const data = await req.payload.update({
+              collection: 'products',
+              id: doc.id,
+              data: {
+                product_embedding: `${doc.id}-embedded`,
+              },
+            })
+
+            console.log('Product embedding upserted')
+
+            return data
+          }
         }
+
+        return doc
       },
     ],
     afterDelete: [
-      async ({ collection, context, id }) => {
-        if (embedding || index) {
-          console.log(id)
-          console.log('embedding is enabled')
-          const payload = await getPayloadClient()
-        } else {
-          console.log('embedding is disabled')
+      async ({ req, doc }) => {
+        if (index) {
+          await index.delete(doc.id)
+          console.log('Product embedding deleted')
         }
       },
     ],
@@ -175,11 +194,7 @@ export const Products: CollectionConfig = {
     {
       name: 'product_embedding',
       label: 'Product Embedding',
-      type: 'relationship',
-      relationTo: 'product_embeddings',
-      admin: {
-        readOnly: true,
-      },
+      type: 'text',
     },
     {
       name: 'product_image_embeddings',
@@ -187,9 +202,6 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'image_embeddings',
       hasMany: true,
-      admin: {
-        readOnly: true,
-      },
     },
   ],
 }

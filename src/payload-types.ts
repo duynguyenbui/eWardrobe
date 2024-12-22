@@ -29,7 +29,6 @@ export interface Config {
     payment_statuses: PaymentStatus;
     categories: Category;
     media: Media;
-    product_embeddings: ProductEmbedding;
     image_embeddings: ImageEmbedding;
     conversations: Conversation;
     'payload-locked-documents': PayloadLockedDocument;
@@ -56,7 +55,6 @@ export interface Config {
     payment_statuses: PaymentStatusesSelect<false> | PaymentStatusesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    product_embeddings: ProductEmbeddingsSelect<false> | ProductEmbeddingsSelect<true>;
     image_embeddings: ImageEmbeddingsSelect<false> | ImageEmbeddingsSelect<true>;
     conversations: ConversationsSelect<false> | ConversationsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -173,7 +171,7 @@ export interface Product {
   }[];
   product_discounts?: (number | ProductDiscount)[] | null;
   product_reviews?: (number | Comment)[] | null;
-  product_embedding?: (number | null) | ProductEmbedding;
+  product_embedding?: string | null;
   product_image_embeddings?: (number | ImageEmbedding)[] | null;
   updatedAt: string;
   createdAt: string;
@@ -260,17 +258,6 @@ export interface Comment {
   id: number;
   comment: string;
   user: number | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product_embeddings".
- */
-export interface ProductEmbedding {
-  id: number;
-  product_id: string;
-  product_embedding: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -591,10 +578,6 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'product_embeddings';
-        value: number | ProductEmbedding;
-      } | null)
-    | ({
         relationTo: 'image_embeddings';
         value: number | ImageEmbedding;
       } | null)
@@ -907,16 +890,6 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product_embeddings_select".
- */
-export interface ProductEmbeddingsSelect<T extends boolean = true> {
-  product_id?: T;
-  product_embedding?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
