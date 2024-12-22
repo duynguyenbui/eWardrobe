@@ -5,7 +5,7 @@ declare global {
 }
 
 if (!global.redis) {
-  if (true || !process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
+  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
     global.redis = undefined
   } else {
     global.redis = new Redis({
